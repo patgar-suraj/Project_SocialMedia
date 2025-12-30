@@ -9,15 +9,15 @@ const API = axios.create({
 });
 
 export const registerUser = (username, password) => {
-  return API.post('/auth/register', { username, password });
+  return API.post('/register', { username, password });
 };
 
 export const loginUser = (username, password) => {
-  return API.post('/auth/login', { username, password });
+  return API.post('/login', { username, password });
 };
 
 export const createPost = (formData) => {
-  return API.post('/post', formData, {
+  return API.post('/', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -25,7 +25,7 @@ export const createPost = (formData) => {
 };
 
 export const checkAuth = () => {
-  return API.get('/auth/me');
+  return API.get('/me');
 };
 
 export default API;
