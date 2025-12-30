@@ -8,9 +8,6 @@ async function createPostController(req, res){
     
     const base64image = new Buffer.from(file.buffer).toString("base64")
 
-    // const caption = await generateCaption(base64image)
-    // const result = await uploadFile(file.buffer, `${uuidv4()}`)
-
     const [ caption, result ] = await Promise.all([
         generateCaption(base64image),
         uploadFile(file.buffer, `${uuidv4()}`)
