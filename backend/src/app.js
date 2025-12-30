@@ -8,7 +8,7 @@ const app = express()
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.PORT || "http://localhost:5173",
+  origin: "https://captiongenerator-frontend-6a1k.onrender.com",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
