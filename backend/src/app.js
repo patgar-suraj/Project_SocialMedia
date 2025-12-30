@@ -16,7 +16,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParser())
-app.use("/api/auth", userRouter)
-app.use("/api/post", postRouter)
+app.use(userRouter)
+app.use(postRouter)
 
 module.exports = app
