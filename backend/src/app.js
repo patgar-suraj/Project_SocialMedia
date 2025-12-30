@@ -8,8 +8,7 @@ const app = express()
 
 // CORS configuration
 const allowedOrigins = [
-  "https://captiongenerator-frontend-6a1k.onrender.com",
-  "http://localhost:5173"
+  "https://captiongenerator-frontend-6a1k.onrender.com"
 ];
 
 app.use(cors({
