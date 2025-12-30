@@ -7,8 +7,19 @@ const cookieParser = require("cookie-parser")
 const app = express()
 
 // CORS configuration
+const allowedOrigins = [
+  "https://captiongenerator-frontend-6a1k.onrender.com",
+  "http://localhost:5173"
+];
+
 app.use(cors({
-  origin: "https://captiongenerator-frontend-6a1k.onrender.com",
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -16,7 +27,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(userRouter)
-app.use(postRouter)
+app.use("/api/auth", userRouter)
+app.use("/api/post", postRouter)
 
 module.exports = app
