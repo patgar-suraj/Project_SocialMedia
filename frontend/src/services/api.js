@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://captiongenerator-backend-o538.onrender.com',
+  baseURL: process.env.PORT || 'https://captiongenerator-backend-o538.onrender.com',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

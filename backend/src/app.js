@@ -10,7 +10,8 @@ const app = express()
 const allowedOrigins = [
   "https://captiongenerator-frontend-6a1k.onrender.com",
   "http://localhost:5173",
-  "http://localhost:3000"
+  "http://localhost:3000",
+  process.env.PORT
 ];
 
 app.use(cors({
