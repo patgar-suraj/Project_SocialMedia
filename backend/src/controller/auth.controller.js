@@ -3,40 +3,61 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 
 async function registerController(req, res) {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  const existUser = await userModel.findOne({ username });
-  if (existUser) {
-    return res.status(400).json({
-      message: "username already in use",
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "username and password are required",
+      });
+    }
+
+    const existUser = await userModel.findOne({ username });
+    if (existUser) {
+      return res.status(400).json({
+        message: "username already in use",
+      });
+    }
+
+    const user = await userModel.create({
+      username,
+      password: await bcrypt.hash(password, 10)
+    });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    });
+
+    res.status(201).json({
+      message: "user registered successfully",
+      user: {
+        id: user._id,
+        username: user.username
+      }
+    });
+  } catch (err) {
+    console.log("Registration error:", err);
+    res.status(500).json({
+      message: "Internal server error",
+      error: err.message
     });
   }
-
-  const user = await userModel.create({
-    username,
-    password: await bcrypt.hash(password, 10)
-  });
-
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-  });
-
-  res.status(201).json({
-    message: "user registered successfully",
-    user: {
-      id: user._id,
-      username: user.username
-    }
-  });
 }
 
 async function loginController(req, res){
+  try {
     const {username, password} = req.body
+
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "username and password are required",
+      });
+    }
 
     const user = await userModel.findOne({username})
     if(!user){
@@ -67,6 +88,13 @@ async function loginController(req, res){
             username: user.username
         }
     })
+  } catch (err) {
+    console.log("Login error:", err);
+    res.status(500).json({
+      message: "Internal server error",
+      error: err.message
+    });
+  }
 }
 
 async function logoutController(req, res) {
