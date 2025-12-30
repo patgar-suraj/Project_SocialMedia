@@ -8,20 +8,23 @@ const app = express()
 
 // CORS configuration
 const allowedOrigins = [
-  "https://captiongenerator-frontend-6a1k.onrender.com"
+  "https://captiongenerator-frontend-6a1k.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:3000"
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(null, true); // Allow all origins in production for debugging
     }
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 200
 }))
 
 app.use(express.json())
